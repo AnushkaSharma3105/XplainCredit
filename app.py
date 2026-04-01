@@ -292,36 +292,36 @@ else:
     with col_shap:
         st.markdown('<p class="section-header">🔎 Why this decision? (SHAP Explanation)</p>',
                     unsafe_allow_html=True)
-
         if SHAP_AVAILABLE:
             with st.spinner("Calculating SHAP values..."):
                 try:
                     explainer = shap.TreeExplainer(model)
                     shap_values = explainer.shap_values(input_df)
-        
+
                     if isinstance(shap_values, list):
                         sv = shap_values[1][0]
                     else:
                         sv = shap_values[0]
-        
+
                     fig, ax = plt.subplots(figsize=(7, 4))
                     feature_display = [FEATURE_LABELS.get(f, f) for f in FEATURES]
                     sorted_idx = np.argsort(np.abs(sv))[::-1][:8]
                     vals = sv[sorted_idx]
                     labels = [feature_display[i] for i in sorted_idx]
                     bar_colors = ["#dc3545" if v > 0 else "#28a745" for v in vals]
-        
+
                     ax.barh(range(len(vals)), vals[::-1], color=bar_colors[::-1])
                     ax.set_yticks(range(len(vals)))
                     ax.set_yticklabels(labels[::-1])
                     ax.axvline(0, color="black")
                     st.pyplot(fig)
                     plt.close()
-        
+
                 except Exception as e:
                     st.error(f"SHAP error: {e}")
-else:
-    st.info("SHAP explanations are available only in local version.")
+
+        else:
+            st.info("SHAP explanations are available only in local version.")
 
                 fig, ax = plt.subplots(figsize=(7, 4))
                 feature_display = [FEATURE_LABELS.get(f, f) for f in FEATURES]
