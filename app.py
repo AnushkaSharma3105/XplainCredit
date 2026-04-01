@@ -323,28 +323,6 @@ else:
         else:
             st.info("SHAP explanations are available only in local version.")
 
-                fig, ax = plt.subplots(figsize=(7, 4))
-                feature_display = [FEATURE_LABELS.get(f, f) for f in FEATURES]
-                colors = ["#dc3545" if v > 0 else "#28a745" for v in sv]
-                sorted_idx = np.argsort(np.abs(sv))[::-1][:8]
-                vals   = sv[sorted_idx]
-                labels = [feature_display[i] for i in sorted_idx]
-                bar_colors = ["#dc3545" if v > 0 else "#28a745" for v in vals]
-
-                bars = ax.barh(range(len(vals)), vals[::-1], color=bar_colors[::-1], height=0.6)
-                ax.set_yticks(range(len(vals)))
-                ax.set_yticklabels(labels[::-1], fontsize=9)
-                ax.axvline(0, color="black", linewidth=0.8)
-                ax.set_xlabel("SHAP Value (impact on default probability)", fontsize=8)
-                ax.set_title("Feature Impact — Red = increases risk, Green = reduces risk", fontsize=9)
-                ax.spines[["top", "right"]].set_visible(False)
-                plt.tight_layout()
-                st.pyplot(fig)
-                plt.close()
-
-                st.caption("The longer the bar, the more that feature influenced the prediction.")
-            except Exception as e:
-                st.error(f"SHAP calculation error: {e}")
 
     with col_tips:
         st.markdown('<p class="section-header">💡 How to Improve Approval Chances</p>',
